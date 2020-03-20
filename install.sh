@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+useDocker=true
+
+echo "Use neo4j docker instead of local neo4j server instance?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes|yes|Y|y ) break;;
+        No|no|N|n   ) useDocker=false; break;;
+    esac
+done
+
+
 echo "-> Step 1/3"
 echo "Creating virtual environment in current folder..."
 if [ -d venv ]; then
@@ -15,6 +26,9 @@ echo
 echo "-> Step 2/3"
 echo "Install required packages..."
 pip install -r requirements.txt
+$useDocker && \
+  pip install docker-compose
+
 
 function start-docker() {
     echo "Starting neo4j docker container..."
@@ -41,12 +55,10 @@ function start-local-neo4j() {
 
 echo
 echo "-> Step 3/3"
-echo "Use neo4j docker instead of local neo4j server instance?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes|yes|Y|y ) start-docker; break;;
-        No|no|N|n   ) break;;
-    esac
-done
+if $useDocker; then
+  start-docker
+else
+  start-local-neo4j
+fi
 
 echo "Script finished successfully!"
