@@ -1,7 +1,10 @@
-from neomodel import StructuredNode, StructuredRel
+from neomodel import StructuredRel
 from neomodel import StringProperty, IntegerProperty, DateProperty
 from neomodel import RelationshipFrom, RelationshipTo
-from neomodel import OneOrMore
+
+# For neo4j <= 4.0,
+# these two should be imported from neomodel
+from src.neo4human import StructuredNode, OneOrMore
 
 
 """
