@@ -55,6 +55,11 @@ function start-docker() {
 }
 
 function start-local-neo4j() {
+    echo -n Your local neo4j DB password:
+    read -s password
+    echo
+    cat $password > ./.pass
+    echo "Password saved to $(pwd)/.pass"
     echo "Please run 'neo4j' locally to start the database."
 }
 

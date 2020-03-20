@@ -1,8 +1,7 @@
-import include
-from models.neo_renaming import *
-from models.neomerge import Graph, install_all_labels
+from src.models.neo_renaming import *
+from src.models.neomerge import Graph, install_all_labels
 
-from models.mongo_models import *
+from src.models.mongo_models import *
 from neomodel.exceptions import UniqueProperty
 from datetime import datetime
 
