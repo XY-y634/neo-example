@@ -137,5 +137,5 @@ class Graph:
     @property
     def _auth(self):
         from os import path
-        pass_file_path = path.join(path.abspath(__file__ + '/../../..'), '.neo_auth')
-        return open(pass_file_path).read().strip() if path.exists(pass_file_path) else ""
+        pass_file_path = path.join(path.abspath(__file__ + '/../../..'), '.neo_pass')
+        return 'neo4j:'+open(pass_file_path).read().strip() if path.exists(pass_file_path) else ""

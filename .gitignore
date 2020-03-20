@@ -1,6 +1,7 @@
 ### Python ###
 
 .idea
+.neo_pass
 
 # Virtual Env
 venv/

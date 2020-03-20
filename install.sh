@@ -8,21 +8,29 @@ useDocker=true
 echo "Use neo4j docker instead of local neo4j server instance?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes|yes|Y|y ) break;;
-        No|no|N|n   ) useDocker=false; break;;
+        Yes ) break;;
+        No  ) useDocker=false; break;;
     esac
 done
 
-echo "Neo4j username and password."
-echo "Set if using docker, log if you already created a neo4j instance."
-echo -n "Username: "
-read username
+if $useDocker; then
+    openBrowser=false
+    echo "Open browser after docker started?"
+    select yn in "Yes" "No"; do
+        case $yn in
+            Yes ) openBrowser=true; break;;
+            No  ) break;;
+        esac
+    done
+fi
+
+echo "Neo4j password (username 'neo4j')."
 echo "Leave it to blank (press ENTER) equals disable Neo4j auth."
 echo -n "Password: "
 read -s password
 echo
-echo "$username:$password" > ./.neo_auth
-echo "Password saved to $(pwd)/.neo_auth"
+echo "$password" > ./.neo_pass
+echo "Password saved to $(pwd)/.neo_pass"
 
 
 echo "-> Step 1/3"
@@ -60,12 +68,17 @@ function start-docker() {
     echo "Starting neo4j docker container..."
     echo "Warning: Data in this database will be erased once the container is removed!"
     echo "   This project if for demo only! **DO NOT** use this in production environment."
-    [[ -z $password ]] && neoAuth="none" || neoAuth="$username/$password"
+    [[ -z $password ]] && neoAuth="none" || neoAuth="neo4j/$password"
+    echo "Starting Neo4j with AUTH: $neoAuth"
+    # Don't show err msg and don't quit
+    docker-compose down 2> /dev/null || true
     NEO4J_AUTH=$neoAuth docker-compose up -d
-    wait-neo4j-start
-    echo "Bringing up the browser..."
-    xdg-open "http://localhost:7474" &
-    sleep 1
+    if $openBrowser; then
+        wait-neo4j-start
+        echo "Bringing up the browser..."
+        xdg-open "http://localhost:7474" &
+        sleep 1
+    fi
 }
 
 function start-local-neo4j() {
