@@ -81,3 +81,4 @@ else
 fi
 
 echo "Script finished successfully!"
+echo "Run scripts in src.examples and have fun!"
