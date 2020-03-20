@@ -19,8 +19,8 @@ if [ -d venv ]; then
 else
   pip3 install virtualenv
   virtualenv venv
-  source venv/bin/activate
 fi
+source venv/bin/activate
 
 echo
 echo "-> Step 2/3"
@@ -30,11 +30,7 @@ $useDocker && \
   pip install docker-compose
 
 
-function start-docker() {
-    echo "Starting neo4j docker container..."
-    echo "Warning: Data in this database will be erased once the container is removed!"
-    echo "   This project if for demo only! **DO NOT** use this in production environment."
-    docker-compose up -d
+function wait-neo4j-start() {
     echo "Waiting for neo4j to start..."
     secs=10
     prefix="Browser will start in"
@@ -44,6 +40,15 @@ function start-docker() {
        sleep 1
        : $((secs--))
     done
+    echo
+}
+
+function start-docker() {
+    echo "Starting neo4j docker container..."
+    echo "Warning: Data in this database will be erased once the container is removed!"
+    echo "   This project if for demo only! **DO NOT** use this in production environment."
+    docker-compose up -d
+    wait-neo4j-start
     echo "Bringing up the browser..."
     xdg-open "http://localhost:7474" &
     sleep 1
