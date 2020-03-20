@@ -13,6 +13,7 @@ select yn in "Yes" "No"; do
     esac
 done
 
+rm -f ./.neo_auth
 echo "Neo4j username and password."
 echo "Set if using docker, log if you already created a neo4j instance."
 echo -n "Username: "
