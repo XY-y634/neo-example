@@ -44,10 +44,12 @@ function wait-neo4j-start() {
 }
 
 function start-docker() {
+    rm -f ./.pass
     echo "Starting neo4j docker container..."
     echo "Warning: Data in this database will be erased once the container is removed!"
     echo "   This project if for demo only! **DO NOT** use this in production environment."
     docker-compose up -d
+    echo "Use neo4j/<no password> to login when the borwser started."
     wait-neo4j-start
     echo "Bringing up the browser..."
     xdg-open "http://localhost:7474" &
@@ -58,7 +60,7 @@ function start-local-neo4j() {
     echo -n Your local neo4j DB password:
     read -s password
     echo
-    cat $password > ./.pass
+    cat "$password" > ./.pass
     echo "Password saved to $(pwd)/.pass"
     echo "Please run 'neo4j' locally to start the database."
 }
