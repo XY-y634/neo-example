@@ -4,7 +4,7 @@ from neomodel import db
 from neomodel.relationship_manager import check_source, OUTGOING, INCOMING
 from neomodel import OneOrMore as LegacyOneOrMore
 from neomodel.match import NodeSet, QueryBuilder
-from neomodel import classproperty
+from neomodel import classproperty, hooks
 
 
 """
@@ -143,6 +143,17 @@ class Neo4QueryBuilder(QueryBuilder):
             query += ' LIMIT {0:d}'.format(self._ast['limit'])
 
         return query
+
+
+@hooks
+def delete(self):
+    self._pre_action_check('delete')
+    self.cypher("MATCH (self) WHERE id(self)=$self "
+                "OPTIONAL MATCH (self)-[r]-()"
+                " DELETE r, self")
+    delattr(self, 'id')
+    self.deleted = True
+    return True
 
 
 class Neo4NodeSet(NodeSet):

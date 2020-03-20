@@ -1,7 +1,7 @@
 from neomodel import config, db
 from neomodel import install_all_labels, clear_neo4j_database
 # For neo4j <= 4.0, `remove_all_labels` should be imported from neomodel
-from src.neo4human.core import remove_all_labels, nodes
+from src.neo4human.core import remove_all_labels, nodes, delete
 from neomodel import Property, StructuredNode
 from neo4j.types.graph import Node
 from neomodel import BooleanProperty, StringProperty, DateProperty
@@ -108,6 +108,7 @@ Property.composite_unique = False
 Property.unique_or_null = False
 StructuredNode.merge = merge
 StructuredNode.nodes = nodes
+StructuredNode.delete = delete
 
 
 def table_view(query):

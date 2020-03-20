@@ -22,7 +22,10 @@ print('article has id:', hasattr(article, 'id'))
 article.merge()
 print('article id after merge:', article.id)
 
-query_article = Paper.nodes.get_or_none(pmid='6327467')
-print(query_article)
+query_article = Paper.nodes.get_or_none(pmid=article.pmid)
+assert query_article == article
 
-
+print()
+print('Deleting this node...')
+article.delete()
+print(Paper.nodes.get_or_none(pmid=article.pmid))
